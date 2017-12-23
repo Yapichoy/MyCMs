@@ -1,16 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Doctor
- * Date: 21.12.2017
- * Time: 22:22
- */
 
-namespace CMS\Controller;
+namespace Admin\Controller;
 use Engine\Controller;
 use Engine\Di\Di;
 
-class CmsController extends Controller{
+class AdminController extends Controller{
     /**
      * @var Di
      */

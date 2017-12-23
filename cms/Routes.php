@@ -1,7 +1,3 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Doctor
- * Date: 22.12.2017
- * Time: 19:41
- */
+$this->router->add('home', '/', 'HomeController:index');
+$this->router->add('news', '/news/{id:int}', 'HomeController:news');

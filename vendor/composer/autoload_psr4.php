@@ -9,4 +9,5 @@ return array(
     'Engine\\Di\\' => array($baseDir . '/engine/Di'),
     'Engine\\' => array($baseDir . '/engine'),
     'CMS\\' => array($baseDir . '/cms'),
+    'Admin\\' => array($baseDir . '/admin'),
 );

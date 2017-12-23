@@ -22,14 +22,13 @@ class Cms {
     }
     public function run(){
         try {
-            $this->router->add('home', '/', 'HomeController:index');
-            $this->router->add('news', '/news/{id:int}', 'HomeController:news');
+            require_once __DIR__.'/../'.strtolower(ENV).'/Routes.php';
             $routerDispatch = $this->router->dispatch(Common::getMethod(), Common::getPathUrl());
             if ($routerDispatch == null) {
                 $routerDispatch = new DispatchedRoute('ErrorController:page404');
             }
             list($class, $action) = explode(':', $routerDispatch->getController(), 2);
-            $controller = '\\CMS\\Controller\\' . $class . '';
+            $controller = '\\'.ENV.'\\Controller\\' . $class . '';
             call_user_func_array([new $controller($this->di),$action],$routerDispatch->getParameters());
 
         }catch (\Exception $e){

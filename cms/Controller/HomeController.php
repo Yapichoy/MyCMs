@@ -11,9 +11,10 @@ namespace CMS\Controller;
 class HomeController extends CmsController{
 
     public function index(){
-        echo 'hi';
+        $this->view->render('index',['name'=>'Vlad', 'family'=>'Kuch']);
     }
     public function news($id){
-        echo 'news ' . $id;
+        //echo 'news' . $id;
+
     }
 }
