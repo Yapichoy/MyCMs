@@ -1,0 +1,12 @@
+{
+
+    "name": "doctor/my-cms2",
+    "require": {},
+    "autoload": {
+      "psr-4": {
+        "Engine\\": "engine",
+        "Engine\\Di\\": "engine/Di",
+        "CMS\\": "cms"
+      }
+    }
+}
