@@ -17,11 +17,11 @@ class Config {
     public static function file($group){
         $path = $_SERVER['DOCUMENT_ROOT'].'/'.mb_strtolower(ENV).'/Config/'.$group.'.php';
         if(file_exists($path)){
-            $items = require_once $path;
-            if(is_array($items)){
+            $items = require $path;
+            if(!empty($items)){
                 return $items;
             }
-            else throw new\Exception('%s',$path);
+            else throw new \Exception(sprintf('%s',$path));
         }
         else throw new \Exception(sprintf(
             'Can`t see fail %s',$path));

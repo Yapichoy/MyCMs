@@ -1,7 +1,9 @@
 <?php
 return [
-    'host' => 'localhost',
+    'host' => '127.0.0.1',
+    'db_name' => 'mycms',
     'port' => '3306',
     'user' => 'root',
-    'password' => ''
+    'password' => '',
+    'charset' => 'utf8'
 ];

@@ -8,7 +8,7 @@
 
 namespace Engine\Core\Database;
 use \PDO;
-//use Engine\Core\Config\Config;
+use Engine\Core\Config\Config;
 
 class Connection {
     private $link;
@@ -16,17 +16,17 @@ class Connection {
         $this->connect();
     }
     public function connect(){
-        //$config = Config::file('database');
+        $config = Config::file('database');
 
-//        $dsn = 'mysql:host='.$config["host"].';dbname='.$config['db_name'].';charset='.$config['charset'];
-//        $this->link = new PDO($dsn,$config['username'],$config['password']);
+       $dsn = 'mysql:host='.$config["host"].';dbname='.$config['db_name'].';charset='.$config['charset'];
+        $this->link = new PDO($dsn,$config['user'],$config['password']);
         return $this;
     }
     public function execute($sql,$values =[]){
         $sth = $this->link->prepare($sql);
         return $sth->execute($values);
     }
-    public function query($sql, $values)
+    public function query($sql, $values=[])
     {
         $sth = $this->link->prepare($sql);
         $sth -> execute($values);

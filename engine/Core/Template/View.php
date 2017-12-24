@@ -17,6 +17,7 @@ class View {
     public  function render($template,$vars = []){
         $templatePath = $this->getTemplatePath($template,ENV);
         if(!is_file($templatePath)){
+
           throw new \InvalidArgumentException(sprintf('Template "%s" not found in "%s"',$template,$templatePath));
         }
         $this->theme->setData($vars);
@@ -32,7 +33,7 @@ class View {
         echo ob_get_clean();
     }
     private function getTemplatePath($template,$env=null){
-            if($env == 'Cms')return ROOT_DIR.'/content/themes/default/'.$template.'.php';
+            if($env == 'CMS')return ROOT_DIR.'/content/themes/default/'.$template.'.php';
             return ROOT_DIR.'/View/'.$template.'.php';
     }
 }
