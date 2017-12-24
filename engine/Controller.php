@@ -15,7 +15,11 @@ abstract class Controller {
      */
     protected  $di;
     protected $db;
+    protected $view;
+    protected $config;
     public function __construct(\Engine\Di\Di $di){
         $this->di = $di;
+        $this->view = $this->di->get('view');
+        $this->config = $this->di->get('config');
     }
 }

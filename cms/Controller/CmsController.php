@@ -14,11 +14,11 @@ class CmsController extends Controller{
     /**
      * @var Di
      */
-    protected $view;
+
 
     public function __construct(Di $di){
 
         parent::__construct($di);
-        $this->view = $this->di->get('view');
+
     }
 }

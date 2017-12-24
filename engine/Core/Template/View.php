@@ -32,13 +32,7 @@ class View {
         echo ob_get_clean();
     }
     private function getTemplatePath($template,$env=null){
-        switch($env){
-            case 'Admin':
-                return ROOT_DIR.'/View/'.$template.'.php';
-            case 'Cms':
-                return ROOT_DIR.'/content/themes/default/'.$template.'.php';
-            default:
-                return ROOT_DIR.'/'.mb_strtolower($env).'/View/'.$template.'.php';
-        }
+            if($env == 'Cms')return ROOT_DIR.'/content/themes/default/'.$template.'.php';
+            return ROOT_DIR.'/View/'.$template.'.php';
     }
 }
