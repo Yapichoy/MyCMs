@@ -9,6 +9,7 @@
 namespace Admin\Controller;
 use Engine\Controller;
 use Engine\Core\Auth\Auth;
+use Engine\Core\Database\QueryBuilder;
 
 class LoginController extends Controller{
 
@@ -27,17 +28,30 @@ class LoginController extends Controller{
     }
     public function auth(){
         $params = $this->request->post;
-        $query = $this->db->query('SELECT * FROM `user` WHERE email="'.$params['email'].'" AND password="'.$params['password'].'"');
+        $qBuilder = new QueryBuilder();
+        $sql = $qBuilder
+            ->select()
+            ->from('user')
+            ->where('email',$params['email'])
+            ->where('password',$params['password'])
+            ->limit(1)->sql();
+        $query = $this->db->query($sql,$qBuilder->values);
         if(!empty($query)){
             $user = $query[0];
             if($user['role'] == 'admin'){
                 $hash = md5($user['email'].$user['password'].$this->auth->salt());
-                $this->db->execute('UPDATE `user` SET hash = "'.$hash.'" WHERE id = '.$user['id']);
+               // $hash = $user['hash'];
+                $sql = $qBuilder
+                    ->update('user')
+                    ->set(['hash'=> $hash])
+                    ->where('id',$user['id'])->sql();
+                $this->db->execute($sql,$qBuilder->values);
                 $this->auth->authorize($hash);
                 header('Location: /admin/',true,301);
                 exit;
             }
         }
-
+        header('Location: /admin/login',true,301);
+        exit;
     }
 }

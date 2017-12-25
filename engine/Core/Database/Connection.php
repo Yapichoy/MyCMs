@@ -28,6 +28,7 @@ class Connection {
     }
     public function query($sql, $values=[])
     {
+        //echo $sql;
         $sth = $this->link->prepare($sql);
         $sth -> execute($values);
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);

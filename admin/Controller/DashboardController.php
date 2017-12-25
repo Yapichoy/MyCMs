@@ -7,13 +7,14 @@
  */
 
 namespace Admin\Controller;
-
+use Admin\Model\User\UserRepository;
 
 class DashboardController extends AdminController{
 
 
     public function index(){
-        // print_r($this->di->get('config'));
+        $userModel = $this->load->model('user');
+        $userModel->repository->test();
         $this->view->render('dashboard');
     }
 }
