@@ -23,16 +23,20 @@ class Connection {
         return $this;
     }
     public function execute($sql,$values =[]){
+        //echo $sql;
         $sth = $this->link->prepare($sql);
         return $sth->execute($values);
     }
     public function query($sql, $values=[])
     {
-        //echo $sql;
+
         $sth = $this->link->prepare($sql);
         $sth -> execute($values);
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         if($result == false)return [];
         return $result;
+    }
+    public function lastInsertId(){
+        return $this->link->lastInsertId();
     }
 }

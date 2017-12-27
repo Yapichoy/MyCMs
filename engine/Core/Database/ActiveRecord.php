@@ -57,13 +57,18 @@ trait ActiveRecord
                     $this->queryBuilder->values
                 );
             } else {
-                $this->db->execute(
+                $ecec = $this->db->execute(
                     $this->queryBuilder->insert($this->getTable())
                         ->set($properties)
                         ->sql(),
                     $this->queryBuilder->values
+
                 );
+                //print_r($ecec);
+
             }
+
+            return $this->db->lastInsertId();
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
