@@ -1,39 +1,62 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Doctor
- * Date: 22.12.2017
- * Time: 19:55
- */
 
 namespace Engine\Core\Template;
-use Engine\Core\Template\Theme;
 
-class View {
+/**
+ * Рендеринг шаблонов.
+ * Исправления:
+ *  - require_once -> require (повторный рендер одного шаблона теперь работает;
+ *    require_once молча возвращала true при повторном рендере того же файла);
+ *  - сравнение ENV приведено к нижнему регистру;
+ *  - добавлен e() — экранирование вывода против XSS (используется в шаблонах).
+ */
+class View
+{
+    /** @var Theme */
     protected $theme;
-    public function __construct(){
+
+    public function __construct()
+    {
         $this->theme = new Theme();
     }
-    public  function render($template,$vars = []){
-        $templatePath = $this->getTemplatePath($template,ENV);
-        if(!is_file($templatePath)){
 
-          throw new \InvalidArgumentException(sprintf('Template "%s" not found in "%s"',$template,$templatePath));
+    public function render($template, array $vars = [])
+    {
+        $templatePath = $this->getTemplatePath($template, strtolower(ENV));
+        if (!is_file($templatePath)) {
+            throw new \InvalidArgumentException(sprintf('Template "%s" not found in "%s"', $template, $templatePath));
         }
+
         $this->theme->setData($vars);
-        extract($vars);
+        extract($vars, EXTR_SKIP);
+
         ob_start();
-        ob_implicit_flush(0);
-        try{
-            require_once $templatePath;
-        }catch (\Exception $e){
+        try {
+            require $templatePath;
+        } catch (\Throwable $e) {
             ob_end_clean();
             throw $e;
         }
-        echo ob_get_clean();
+        echo (string)ob_get_clean();
     }
-    private function getTemplatePath($template,$env=null){
-            if($env == 'CMS')return ROOT_DIR.'/content/themes/default/'.$template.'.php';
-            return ROOT_DIR.'/View/'.$template.'.php';
+
+    /** @var Theme */
+    public function theme()
+    {
+        return $this->theme;
+    }
+
+    private function getTemplatePath($template, $env = null)
+    {
+        if ($env === 'cms') {
+            return ROOT_DIR . '/content/themes/default/' . $template . '.php';
+        }
+        return ROOT_DIR . '/View/' . $template . '.php';
+    }
+
+    /** Экранирование для шаблонов: <?= $view::e($x) ?> или e($x) через import. */
+    public static function e($value)
+    {
+        return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 }

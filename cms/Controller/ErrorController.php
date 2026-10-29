@@ -1,16 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Doctor
- * Date: 21.12.2017
- * Time: 22:13
- */
 
 namespace CMS\Controller;
 
-class ErrorController extends CmsController{
-
-    public function page404(){
-        echo '404'.ENV;
+/**
+ * Публичная 404. Исправление: убран вывод ENV (утечка internals).
+ */
+class ErrorController extends CmsController
+{
+    public function page404()
+    {
+        http_response_code(404);
+        echo '<h1>404 — страница не найдена</h1>';
     }
 }

@@ -1,29 +1,31 @@
 <?php
 
 namespace Admin\Controller;
+
 use Engine\Controller;
 use Engine\Di\Di;
-use Engine\Core\Auth\Auth;
-class AdminController extends Controller{
-    /**
-     * @var Di
-     */
-    protected $auth;
 
-    public function __construct(Di $di){
-
+/**
+ * Базовый контроллер защищённой части админки.
+ * Исправления:
+ *  - проверка авторизации через серверную сессию (Auth), а не cookie-хеш;
+ *  - redirect со статусом 302 вместо «header()+exit» с дефолтным 301-кэшированием;
+ *  - единая точка входа для всех админ-контроллеров.
+ */
+class AdminController extends Controller
+{
+    public function __construct(Di $di)
+    {
         parent::__construct($di);
 
-        $this->auth = new Auth();
-        if($this->auth->hashUser()==null){
-            header("Location: /admin/login");
-            exit;
+        if (!$this->auth()->authorized()) {
+            $this->redirect('/admin/login');
         }
-
     }
-    public function logout(){
-        $this->auth->unAuthorize();
-        header("Location: /admin/login/");
-        exit;
+
+    public function logout()
+    {
+        $this->auth()->logout();
+        $this->redirect('/admin/login');
     }
 }
