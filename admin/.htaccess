@@ -1,4 +1,16 @@
+# Исправлено: было RewriteRule ^(.*)$ index.php/$l ($l вместо $1) — битые чистые URL.
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php/$l [L]
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+# Запрет прямого доступа к конфигурации с секретам
+<FilesMatch "^(database|main)\.php$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>

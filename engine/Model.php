@@ -1,25 +1,36 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Doctor
- * Date: 25.12.2017
- * Time: 18:12
- */
 
 namespace Engine;
 
-
 use Engine\Di\Di;
 use Engine\Core\Database\QueryBuilder;
-abstract class Model {
-    protected  $di;
+
+/**
+ * Базовый репозиторий.
+ * Доработано: newQueryBuilder() — отдельный чистый построитель для параллельных
+ * запросов (прежний общий $qBuilder затирался при повторном использовании в
+ * рамках одного контроллера).
+ */
+abstract class Model
+{
+    /** @var Di */
+    protected $di;
+    /** @var \Engine\Core\Database\Connection */
     protected $db;
     protected $config;
+    /** @var QueryBuilder */
     protected $qBuilder;
-    public function __construct(Di $di){
-        $this->di = $di;
-        $this->db = $this->di->get('db');
-        $this->config = $this->di->get('config');
+
+    public function __construct(Di $di)
+    {
+        $this->di       = $di;
+        $this->db       = $di->get('db');
+        $this->config   = $di->get('config');
         $this->qBuilder = new QueryBuilder();
+    }
+
+    protected function newQueryBuilder(): QueryBuilder
+    {
+        return new QueryBuilder();
     }
 }

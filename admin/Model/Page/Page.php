@@ -1,85 +1,49 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Doctor
- * Date: 26.12.2017
- * Time: 17:58
- */
 
 namespace Admin\Model\Page;
 
-
 use Engine\Core\Database\ActiveRecord;
 
-class Page {
+/**
+ * Сущность страницы. Поле `slug` добавлено для ЧПУ-ссылк (модель + схема).
+ */
+class Page
+{
     use ActiveRecord;
+
     protected $table = 'page';
+
     public $id;
-    public  $title;
+    public $title;
     public $content;
+    public $slug;
     public $date;
 
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+    public function getId() { return $this->id; }
+    public function setId($id) { $this->id = (int)$id; }
 
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
+    public function getTitle() { return $this->title; }
+    public function setTitle($title) { $this->title = trim((string)$title); }
 
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
+    public function getContent() { return $this->content; }
+    public function setContent($content) { $this->content = $content; }
 
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
+    public function getDate() { return $this->date; }
+    public function setDate($date) { $this->date = $date; }
 
-    /**
-     * @return mixed
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
+    public function getSlug() { return $this->slug; }
 
-    /**
-     * @param mixed $content
-     */
-    public function setContent($content)
+    /** Генерируем безопасный slug из заголовка (не из пользовательского ввода как есть) */
+    public function generateSlug(string $source): void
     {
-        $this->content = $content;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * @param mixed $date
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
+        $map = ['а'=>'a','б'=>'b','в'=>'v','г'=>'g','д'=>'d','е'=>'e','ё'=>'e','ж'=>'zh','з'=>'z',
+                'и'=>'i','й'=>'y','к'=>'k','л'=>'l','м'=>'m','н'=>'n','о'=>'o','п'=>'p','р'=>'r',
+                'с'=>'s','т'=>'t','у'=>'u','ф'=>'f','х'=>'h','ц'=>'c','ч'=>'ch','ш'=>'sh','щ'=>'sch',
+                'ъ'=>'','ы'=>'y','ь'=>'','э'=>'e','ю'=>'yu','я'=>'ya'];
+        $s = strtolower($source);
+        $s = strtr($s, $map);
+        $s = preg_replace('/[^a-z0-9]+/', '-', $s);
+        $s = trim($s, '-');
+        $this->slug = substr($s !== '' ? $s : 'page', 0, 100);
     }
 }

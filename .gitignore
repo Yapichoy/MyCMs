@@ -1,0 +1,11 @@
+.env
+.env.local
+.env.*.local
+logs/*.log
+!logs/.gitkeep
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

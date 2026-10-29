@@ -1,17 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Doctor
- * Date: 23.12.2017
- * Time: 18:30
- */
 
 namespace Admin\Controller;
 
-
-class ErrorController extends AdminController{
-
-    public function page404(){
-        echo '404 '.ENV;
+/**
+ * Ошибки админки. Не наследуем гостевой запрос от AdminController-защиты:
+ * 404 показываем до редиректа на логин только для несуществующих путей.
+ */
+class ErrorController extends \Engine\Controller
+{
+    public function page404()
+    {
+        http_response_code(404);
+        echo '<h1>404 — страница не найдена</h1>';
     }
 }

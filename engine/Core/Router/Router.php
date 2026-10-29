@@ -1,45 +1,50 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Doctor
- * Date: 18.12.2017
- * Time: 21:27
- */
 
 namespace Engine\Core\Router;
 
-
-class Router {
+/**
+ * Исправлен fatal error: `$this->host = host;` (неопределённая константа).
+ */
+class Router
+{
     private $routes = [];
     private $host;
+    /** @var UrlDispatcher|null */
     private $dispatcher;
-    public function __construct($host){
-    $this->host = host;
+
+    public function __construct($host = null)
+    {
+        $this->host = $host;
     }
 
-    /**
-     * @param $key
-     * @param $pattern
-     * @param $controller
-     * @param string $method
-     */
-    public function add($key,$pattern,$controller, $method = 'GET'){
+    public function add($key, $pattern, $controller, $method = 'GET')
+    {
         $this->routes[$key] = [
-            'pattern'      => $pattern,
-            'controller'   => $controller,
-            'method'       => $method
+            'pattern'    => $pattern,
+            'controller' => $controller,
+            'method'     => strtoupper($method),
         ];
     }
-    public function dispatch($method, $uri){
-        return $this->getDispatcher()->Dispatch($method,$uri);
+
+    public function dispatch($method, $uri)
+    {
+        return $this->getDispatcher()->dispatch($method, $uri);
     }
-    public function getDispatcher(){
-        if($this->dispatcher == null){
+
+    /** @return UrlDispatcher */
+    public function getDispatcher()
+    {
+        if ($this->dispatcher === null) {
             $this->dispatcher = new UrlDispatcher();
-            foreach($this->routes as $route){
-                $this->dispatcher->register($route['method'],$route['pattern'],$route['controller']);
+            foreach ($this->routes as $route) {
+                $this->dispatcher->register($route['method'], $route['pattern'], $route['controller']);
             }
         }
         return $this->dispatcher;
+    }
+
+    public function getHost()
+    {
+        return $this->host;
     }
 }
